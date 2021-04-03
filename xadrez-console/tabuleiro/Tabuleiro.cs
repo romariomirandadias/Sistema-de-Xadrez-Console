@@ -20,7 +20,7 @@ namespace tabuleiro
             return pecas[linha, coluna];
         }
 
-        public Peca peca(Posicao pos)
+        public Peca peca(Posicao pos) 
         {
             return pecas[pos.linha, pos.coluna];
         }
