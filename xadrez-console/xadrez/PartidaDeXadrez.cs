@@ -15,6 +15,7 @@ namespace xadrez
         public bool xeque { get; private set; }
 
         public Peca vulneravelEnPassant { get; private set; }
+        
 
 
         public PartidaDeXadrez()
@@ -87,6 +88,8 @@ namespace xadrez
             return pecaCapturada;
         }
 
+        
+
         public void realizaJogada(Posicao origem, Posicao destino)
         {
             Peca pecaCapturada = executarMovimento(origem, destino);
@@ -95,6 +98,22 @@ namespace xadrez
                 desfazerMovimento(origem, destino, pecaCapturada);
                 throw new TabuleiroException("Você não pode se colocar em cheque !");
             }
+
+            Peca p = tab.peca(destino);
+            // #jogada especial promoção
+
+            if (p is Peao)
+            {
+                if ((p.cor==Cor.Branca && destino.linha==0) || (p.cor==Cor.Preta && destino.linha==7))
+                {
+                    p = tab.retirarPeca(destino);
+                    pecas.Remove(p);
+                    Peca rainha = new Rainha(tab, p.cor);
+                    tab.colocarPeca(rainha, destino);
+                    pecas.Add(rainha);
+                }
+            }
+
             if (estaEmCheque(pecaAdversaria(jogadorAtual)))
             {
                 xeque = true;
@@ -114,7 +133,7 @@ namespace xadrez
                 mudaJogador();
             }
 
-            Peca p = tab.peca(destino);
+             p= tab.peca(destino);
 
             // #jogada especial en passant
 
